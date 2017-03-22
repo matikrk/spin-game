@@ -1,0 +1,31 @@
+{
+  "extends": [
+    "eslint:recommended",
+    "airbnb-base"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module"
+  },
+  "env": {
+    "commonjs": true,
+    "browser": true,
+    "mocha": true,
+    "es6": true,
+    "node": true
+  },
+  "rules": {
+    "max-len": 0,
+    "indent": [
+      "error",
+      2,
+      {
+        "SwitchCase": 1
+      }
+    ],
+    "linebreak-style": "off",
+    "prefer-const": 1,
+    "object-curly-spacing": ["error","never"],
+    "arrow-parens": ["error","as-needed"]
+  }
+}
