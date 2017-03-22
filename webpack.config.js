@@ -1,15 +1,20 @@
 const path = require('path');
 
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+
 // TODO not working, need add this in package.json in build script
 const isProductionBuild = process.argv.indexOf('--production') !== -1;
 
 const webpack = require('webpack');
 
-const plugins = [];
+const plugins = [
+  new ExtractTextPlugin("style.css"),
+];
 const output = {
   filename: 'main.js',
   publicPath: 'build/',
-  path: path.resolve(__dirname, 'build'),
+  path : path.resolve(__dirname, 'build')
+
 };
 
 if (isProductionBuild) {
@@ -25,7 +30,7 @@ if (isProductionBuild) {
 module.exports = {
   entry: './src/main.js',
   module: {
-    loaders: [
+    rules: [
       // {
       //   enforce: 'pre',
       //   test: /\.js$/,
@@ -39,7 +44,10 @@ module.exports = {
       },
       {
         test: /\.less$/,
-        loader: 'raw!postcss!less',
+        use: ExtractTextPlugin.extract({
+          use: ['css-loader', 'less-loader'],
+          fallback: 'style-loader'
+        })
       }
     ],
   },
