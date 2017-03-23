@@ -1,3 +1,5 @@
+import CanvasController from './CanvasController';
+
 class Game {
   constructor() {
     this.getUIReferences();
@@ -19,12 +21,14 @@ class Game {
   loadResources() {
     this.startLoading();
 
+
     const symbolsPath = '/rest/symbols.json';
 
     fetch(symbolsPath)
       .then(response => response.json())
       .then(data => this.prepareOptions(data))
       .then(data => this.prepareImages(data))
+      .then(() => this.initializeCanvasController())
       .then(() => this.stopLoading());
   }
 
@@ -64,10 +68,12 @@ class Game {
   }
 
   startLoading() {
+    this.disableButtons();
     console.log('loading');
   }
 
   stopLoading() {
+    this.enableButtons()
     console.log('stopLoading');
   }
 
@@ -98,9 +104,10 @@ class Game {
       resolve => {
         this.onWait();
         const winnerIndex = Math.floor(Math.random() * this.loadedImages.length);
-        const {image, name} = this.loadedImages[winnerIndex];
+        const winner = this.loadedImages[winnerIndex];
 
-        setTimeout(() => resolve(name), 1000);
+        this.canvasController.spin(winner)
+          .then(() => resolve(winner.name));
 
       }
     );
@@ -127,6 +134,14 @@ class Game {
     } else {
       this.onLoose();
     }
+  }
+
+  initializeCanvasController() {
+    this.canvasController = new CanvasController({
+      canvas: this.elements.canvas,
+      images: this.loadedImages,
+      spinTime: 1000
+    });
   }
 }
 
