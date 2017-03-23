@@ -76,26 +76,38 @@ class Game {
   }
 
   onSubmit() {
-    const selected = this.elements.select.value;
+    this.disableButtons();
 
-    this.spin(selected);
+    this.spin()
+      .then(winnerName => this.updateScoreBoard(winnerName))
+      .then(() => this.enableButtons());
   }
 
-  spin(selected) {
+  disableButtons() {
+    this.elements.submit.disabled = true;
+    this.elements.select.disabled = true;
+  }
+
+  enableButtons() {
+    this.elements.submit.disabled = false;
+    this.elements.select.disabled = false;
+  }
+
+  spin() {
     return new Promise(
       resolve => {
+        this.onWait();
         const winnerIndex = Math.floor(Math.random() * this.loadedImages.length);
-        const winner = this.loadedImages[winnerIndex];
+        const {image, name} = this.loadedImages[winnerIndex];
 
-
-        if (winner.name === selected) {
-          this.onWin();
-        } else {
-          this.onLoose();
-        }
+        setTimeout(() => resolve(name), 1000);
 
       }
     );
+  }
+
+  onWait() {
+    this.elements.results.textContent = 'Wait for it :)'
   }
 
   onWin() {
@@ -107,6 +119,15 @@ class Game {
 
   }
 
+  updateScoreBoard(winnerName) {
+    const selected = this.elements.select.value;
+
+    if (winnerName === selected) {
+      this.onWin();
+    } else {
+      this.onLoose();
+    }
+  }
 }
 
 export default Game;
