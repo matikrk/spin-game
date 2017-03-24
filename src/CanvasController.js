@@ -13,13 +13,34 @@ class CanvasController {
     this.ctx.drawImage(image, 0, 0)
   }
 
+  * nextImageGenerator() {
+    const length = this.images.length;
+    for (let i = 0; i < 50; i++) {
+      const index = i % length;
+      yield this.images[index].image;
+    }
+  }
+
+
   spin(winner) {
     return new Promise(
       res => {
-        this.drawImage(winner.image)
-        res();
-      })
-  }
+        const nextImageIterator = this.nextImageGenerator();
 
+        const interval = setInterval(() => {
+          const {value} = nextImageIterator.next();
+          this.drawImage(value);
+        }, 100);
+
+        setTimeout(
+          () => {
+            clearInterval(interval);
+            this.drawImage(winner.image);
+            res();
+          }, this.spinTime);
+
+      });
+  }
 }
+
 export default CanvasController;
