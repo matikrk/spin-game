@@ -26,6 +26,7 @@
     "linebreak-style": "off",
     "prefer-const": 1,
     "object-curly-spacing": ["error","never"],
-    "arrow-parens": ["error","as-needed"]
+    "arrow-parens": ["error","as-needed"],
+    "no-plusplus":"off"
   }
 }

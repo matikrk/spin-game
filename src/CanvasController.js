@@ -5,12 +5,11 @@ class CanvasController {
     this.spinTime = spinTime;
     this.spinTimeDelta = spinTimeDelta; // later to change spin time
     this.images = images;
-
   }
 
   drawImage(image) {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.ctx.drawImage(image, 0, 0)
+    this.ctx.drawImage(image, 0, 0);
   }
 
   * nextImageGenerator() {
@@ -30,7 +29,7 @@ class CanvasController {
         const interval = setInterval(() => {
           const {value} = nextImageIterator.next();
           this.drawImage(value);
-        }, 100);
+        }, 120);
 
         setTimeout(
           () => {
@@ -38,7 +37,6 @@ class CanvasController {
             this.drawImage(winner.image);
             res();
           }, this.spinTime);
-
       });
   }
 }

@@ -33,13 +33,12 @@ class Game {
   }
 
   prepareOptions(data) {
-
     Object.keys(data).forEach(key => {
       const option = document.createElement('option');
       option.value = key;
       option.text = key;
 
-      this.elements.select.appendChild(option)
+      this.elements.select.appendChild(option);
     });
 
     return data;
@@ -50,35 +49,34 @@ class Game {
     const imagesFetchers = Object.entries(data)
       .map(([name, url]) => this.prepareImage(name, url));
 
-    return Promise.all(imagesFetchers)
+    return Promise.all(imagesFetchers);
   }
 
   prepareImage(name, url) {
-    return new Promise(
-      resolve => {
-        const image = new Image();
-        image.src = url;
-        image.onload = function() {
-          resolve();
-        };
-
-        this.loadedImages.push({name, image});
-      }
-    )
+    return new Promise(resolve => {
+      const image = new Image();
+      image.src = url;
+      image.onload = () => resolve();
+      this.loadedImages.push({name, image});
+    });
   }
 
   startLoading() {
     this.disableButtons();
+
+// eslint-disable-next-line
     console.log('loading');
   }
 
   stopLoading() {
-    this.enableButtons()
+    this.enableButtons();
+
+// eslint-disable-next-line
     console.log('stopLoading');
   }
 
   attachListeners() {
-    this.elements.submit.addEventListener('click', this.onSubmit.bind(this))
+    this.elements.submit.addEventListener('click', this.onSubmit.bind(this));
   }
 
   onSubmit() {
@@ -100,30 +98,26 @@ class Game {
   }
 
   spin() {
-    return new Promise(
-      resolve => {
-        this.onWait();
-        const winnerIndex = Math.floor(Math.random() * this.loadedImages.length);
-        const winner = this.loadedImages[winnerIndex];
+    return new Promise(resolve => {
+      this.onWait();
+      const winnerIndex = Math.floor(Math.random() * this.loadedImages.length);
+      const winner = this.loadedImages[winnerIndex];
 
-        this.canvasController.spin(winner)
-          .then(() => resolve(winner.name));
-
-      }
-    );
+      this.canvasController.spin(winner)
+        .then(() => resolve(winner.name));
+    });
   }
 
   onWait() {
-    this.elements.results.textContent = 'Wait for it :)'
+    this.elements.results.textContent = 'Wait for it :)';
   }
 
   onWin() {
-    this.elements.results.textContent = 'Win'
+    this.elements.results.textContent = 'Win';
   }
 
   onLoose() {
-    this.elements.results.textContent = 'Loose'
-
+    this.elements.results.textContent = 'Loose';
   }
 
   updateScoreBoard(winnerName) {
@@ -140,7 +134,7 @@ class Game {
     this.canvasController = new CanvasController({
       canvas: this.elements.canvas,
       images: this.loadedImages,
-      spinTime: 1000
+      spinTime: 1500,
     });
   }
 }
