@@ -60,8 +60,7 @@ class CanvasController {
       this.drawImage(winner.image);
     };
 
-    return Promise.resolve()
-      .then(promiseDelay(this.finalSpinTime))
+    return promiseDelay(this.finalSpinTime)()
       .then(drawFinalStep)
       .then(promiseDelay(visibleSlidedPeriod));
   }

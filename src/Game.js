@@ -1,18 +1,17 @@
 import CanvasController from './CanvasController';
-import {loadImagesToArray} from './helpers';
-
-const $ = id => document.getElementById(id);
+import {loadImagesToArray, promiseDelay} from './helpers';
 
 class Game {
   constructor(gameContainer) {
-    this.createGameLayers(gameContainer);
     this.initializeInstanceVariables();
+    this.createGameLayers(gameContainer);
     this.loadGame();
   }
 
   createGameLayers(gameContainer = document.body) {
     const gameBoard = document.createElement('div');
-    const [width, height] = [640, 240];
+    gameBoard.classList.add('game-board');
+    const {width, height} = this.config;
 
     const background = document.createElement('canvas');
     background.width = width;
@@ -31,7 +30,10 @@ class Game {
     loader.height = height;
 
     const layers = {background, main, ui, loader};
-    Object.values(layers).forEach(layer => gameBoard.appendChild(layer));
+    Object.values(layers).forEach(layer => {
+      layer.classList.add('game-board__layer');
+      gameBoard.appendChild(layer);
+    });
 
     gameContainer.appendChild(gameBoard);
 
@@ -41,18 +43,25 @@ class Game {
   initializeInstanceVariables() {
     this.loadedImages = [];
     this.loadedStaticImages = [];
+    this.config = {
+      width: 640,
+      height: 240,
+    };
   }
 
   loadGame() {
     this.startLoading();
-
+    console.time('a');
+    console.timeEnd('a');
     Promise.all([
+      promiseDelay(1000)(), // fake delay for loading
       this.loadStaticResources().then(() => this.createBackground()),
       this.loadDynamicResources(),
     ])
       .then(() => this.createControlUI())
       .then(() => this.createMainLayer())
-      .then(() => this.stopLoading());
+      .then(() => this.stopLoading())
+      .then(() => console.timeEnd('a'));
   }
 
   startLoading() {
@@ -80,8 +89,7 @@ class Game {
 
   stopLoading() {
     const canvas = this.layers.loader;
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    canvas.style.display = 'none';
   }
 
 
