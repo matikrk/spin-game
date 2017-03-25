@@ -1,14 +1,22 @@
 import CanvasController from './CanvasController';
+import {loadImagesToArray} from './helpers';
 
 class Game {
   constructor() {
-    this.getUIReferences();
+    this.initializeInstanceVariables();
 
     // temporary here
     this.createBackground();
 
     this.loadResources();
     this.attachListeners();
+  }
+
+  initializeInstanceVariables() {
+    this.loadedImages = [];
+    this.loadedStaticImages = [];
+
+    this.getUIReferences();
   }
 
   getUIReferences() {
@@ -24,15 +32,21 @@ class Game {
   }
 
   createBackground() {
- this.loadStaticResources()
+    this.loadStaticResources();
   }
-  loadStaticResources(){
 
+  loadStaticResources() {
+    const paths = {
+      bg: '/img/bg.png',
+      btSpin: '/img/btnSpin.png',
+      btSpinD: '/img/btnSpinD.png',
+    };
+    return loadImagesToArray(paths, this.loadedStaticImages);
   }
+
 
   loadResources() {
     this.startLoading();
-
 
     const symbolsPath = '/rest/symbols.json';
 
@@ -57,20 +71,7 @@ class Game {
   }
 
   prepareImages(data) {
-    this.loadedImages = [];
-    const imagesFetchers = Object.entries(data)
-      .map(([name, url]) => this.prepareImage(name, url));
-
-    return Promise.all(imagesFetchers);
-  }
-
-  prepareImage(name, url) {
-    return new Promise(resolve => {
-      const image = new Image();
-      image.src = url;
-      image.onload = () => resolve();
-      this.loadedImages.push({name, image});
-    });
+    return loadImagesToArray(data, this.loadedImages);
   }
 
   startLoading() {
