@@ -33,9 +33,12 @@ class CanvasController {
 
   * nextImageGenerator() {
     const length = this.images.length;
-    for (let i = 0; ; i++) {
+    let i = 0;
+
+    while (true) {
       const index = i % length;
       yield this.images[index].image;
+      i++;
     }
   }
 
