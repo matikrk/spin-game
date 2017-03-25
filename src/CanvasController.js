@@ -1,8 +1,9 @@
 import {promiseDelay} from './helpers';
+import config from './config';
 
 class CanvasController {
-  constructor(config) {
-    this.setupConfig(config);
+  constructor(cfg) {
+    this.setupConfig(cfg);
     this.drawInitialScreen();
   }
 
@@ -25,9 +26,10 @@ class CanvasController {
   }
 
   drawImage(image) {
+    const {gameBoard: {width: canvasWidth, height: canvasHeight}, elementsPosition: {spinner: {x, y}}} = config;
     requestAnimationFrame(() => {
-      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-      this.ctx.drawImage(image, 0, 0);
+      this.ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+      this.ctx.drawImage(image, x, y);
     });
   }
 
@@ -35,6 +37,7 @@ class CanvasController {
     const length = this.images.length;
     let i = 0;
 
+    // eslint-disable-next-line
     while (true) {
       const index = i % length;
       yield this.images[index].image;

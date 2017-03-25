@@ -1,3 +1,5 @@
+import config from './config';
+
 function promiseDelay(time) {
   return () => new Promise(res => setTimeout(res, time));
 }
@@ -18,10 +20,19 @@ function loadImagesToArray(paths, array) {
     .then(images => array.push(...images));
 }
 
-/* eslint-disable */
+
+/* eslint-disable no-param-reassign*/
+function setElementPosition(elem, name) {
+  const {elementsPosition: {[name]: {x, y}}} = config;
+  elem.style.position = 'absolute';
+  elem.style.left = `${x}px`;
+  elem.style.top = `${y}px`;
+}
+/* eslint-enable no-param-reassign*/
+
 export {
   promiseDelay,
   loadImagesToArray,
+  setElementPosition,
 };
-/* eslint-enable */
 

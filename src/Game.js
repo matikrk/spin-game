@@ -1,5 +1,6 @@
 import CanvasController from './CanvasController';
-import {loadImagesToArray, promiseDelay} from './helpers';
+import {loadImagesToArray, promiseDelay, setElementPosition} from './helpers';
+import config from './config';
 
 class Game {
   constructor(gameContainer) {
@@ -11,23 +12,27 @@ class Game {
   createGameLayers(gameContainer = document.body) {
     const gameBoard = document.createElement('div');
     gameBoard.classList.add('game-board');
-    const {width, height} = this.config;
+    const {width, height} = config.gameBoard;
 
     const background = document.createElement('canvas');
     background.width = width;
     background.height = height;
+    background.style.zIndex = 1;
 
     const main = document.createElement('canvas');
     main.width = width;
     main.height = height;
+    main.style.zIndex = 2;
 
     const ui = document.createElement('div');
     ui.style.width = `${width}px`;
     ui.style.height = `${height}px`;
+    ui.style.zIndex = 3;
 
     const loader = document.createElement('canvas');
     loader.width = width;
     loader.height = height;
+    loader.style.zIndex = 4;
 
     const layers = {background, main, ui, loader};
     Object.values(layers).forEach(layer => {
@@ -43,16 +48,10 @@ class Game {
   initializeInstanceVariables() {
     this.loadedImages = [];
     this.loadedStaticImages = [];
-    this.config = {
-      width: 640,
-      height: 240,
-    };
   }
 
   loadGame() {
     this.startLoading();
-    console.time('a');
-    console.timeEnd('a');
     Promise.all([
       promiseDelay(1000)(), // fake delay for loading
       this.loadStaticResources().then(() => this.createBackground()),
@@ -60,8 +59,7 @@ class Game {
     ])
       .then(() => this.createControlUI())
       .then(() => this.createMainLayer())
-      .then(() => this.stopLoading())
-      .then(() => console.timeEnd('a'));
+      .then(() => this.stopLoading());
   }
 
   startLoading() {
@@ -117,18 +115,18 @@ class Game {
       .then(data => this.prepareImages(data));
   }
 
+
   createControlUI() {
     const select = document.createElement('select');
-    select.style.position = 'absolute';
+    setElementPosition(select, 'select');
     this.prepareOptions(select);
 
     const results = document.createElement('div');
-    results.style.position = 'absolute';
-    results.style.left = '200px';
+    results.style.color = '#fff';
+    setElementPosition(results, 'results');
 
     const submit = document.createElement('button');
-    submit.style.position = 'absolute';
-    submit.style.left = '100px';
+    setElementPosition(submit, 'submit');
     submit.textContent = 'spin';
 
     const elements = {select, results, submit};
