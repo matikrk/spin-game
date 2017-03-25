@@ -10,18 +10,14 @@
 
 <body>
 <h1>Spin game</h1>
-<div class="game-board">
-  <div class="left">
-    <canvas id="bgCanvas" width="235" height="155"></canvas>
-    <canvas id="canvas" width="235" height="155"></canvas>
-  </div>
-  <div class="right">
-    <div class="results"  id="results">Choose values and spin</div>
-    <div class="controls">
-      <select name="" id="select">
-      </select>
-      <button id="submit">spin</button>
-    </div>
+
+<div id="gameBoard" class="game-board"></div>
+<div class="old">
+  <div class="results"  id="results">Choose values and spin</div>
+  <div class="controls">
+    <select name="" id="select">
+    </select>
+    <button id="submit">spin</button>
   </div>
 </div>
 <script src="/webpack-dev-server.js"></script>

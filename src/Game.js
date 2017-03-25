@@ -1,10 +1,37 @@
 import CanvasController from './CanvasController';
 import {loadImagesToArray} from './helpers';
 
+const $ = id => document.getElementById(id);
+
 class Game {
-  constructor() {
+  constructor(gameContainer) {
+    this.createGameLayers(gameContainer);
     this.initializeInstanceVariables();
     this.loadGame();
+  }
+
+  createGameLayers(gameContainer = document.body) {
+    const gameBoard = document.createElement('div');
+    const [width, height] = [640, 240];
+
+    const background = document.createElement('canvas');
+    background.width = width;
+    background.height = height;
+
+    const main = document.createElement('canvas');
+    main.width = width;
+    main.height = height;
+
+    const ui = document.createElement('div');
+    ui.style.width = `${width}px`;
+    ui.style.height = `${height}px`;
+
+    const layers = {background, main, ui};
+    Object.values(layers).forEach(layer => gameBoard.appendChild(layer));
+
+    gameContainer.appendChild(gameBoard);
+
+    this.layers = layers;
   }
 
   initializeInstanceVariables() {
@@ -41,14 +68,10 @@ class Game {
   }
 
   createUIReferences() {
-    const $ = id => document.getElementById(id);
-
     this.elements = {
       select: $('select'),
-      canvas: $('canvas'),
       results: $('results'),
       submit: $('submit'),
-      bgCanvas: $('bgCanvas'),
     };
   }
 
@@ -62,8 +85,11 @@ class Game {
     return loadImagesToArray(paths, this.loadedStaticImages);
   }
 
-
   createBackground() {
+    const background = this.layers.background;
+    const ctx = background.getContext('2d');
+    const {image} = this.loadedStaticImages.find(({key}) => key === 'bg');
+    ctx.drawImage(image, 0, 0);
   }
 
   loadDynamicResources() {
@@ -71,24 +97,22 @@ class Game {
 
     return fetch(symbolsPath)
       .then(response => response.json())
-      .then(data => this.prepareOptions(data))
       .then(data => this.prepareImages(data));
   }
 
   createControlUI() {
+    this.prepareOptions();
     this.attachListeners();
   }
 
-  prepareOptions(data) {
-    Object.keys(data).forEach(key => {
+  prepareOptions() {
+    this.loadedImages.forEach(({key}) => {
       const option = document.createElement('option');
       option.value = key;
       option.text = key;
 
       this.elements.select.appendChild(option);
     });
-
-    return data;
   }
 
   prepareImages(data) {
@@ -103,7 +127,7 @@ class Game {
     this.disableButtons();
 
     this.spin()
-      .then(winnerName => this.updateScoreBoard(winnerName))
+      .then(winnerKey => this.updateScoreBoard(winnerKey))
       .then(() => this.enableButtons());
   }
 
@@ -124,7 +148,7 @@ class Game {
       const winner = this.loadedImages[winnerIndex];
 
       this.canvasController.spin(winner)
-        .then(() => resolve(winner.name));
+        .then(() => resolve(winner.key));
     });
   }
 
@@ -140,10 +164,10 @@ class Game {
     this.elements.results.textContent = 'Loose';
   }
 
-  updateScoreBoard(winnerName) {
+  updateScoreBoard(winnerKey) {
     const selected = this.elements.select.value;
 
-    if (winnerName === selected) {
+    if (winnerKey === selected) {
       this.onWin();
     } else {
       this.onLoose();
@@ -152,7 +176,7 @@ class Game {
 
   initializeCanvasController() {
     this.canvasController = new CanvasController({
-      canvas: this.elements.canvas,
+      canvas: this.layers.main,
       images: this.loadedImages,
     });
   }

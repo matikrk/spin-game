@@ -2,17 +2,17 @@ function promiseDelay(time) {
   return () => new Promise(res => setTimeout(res, time));
 }
 
-function prepareImage(name, url) {
+function prepareImage(key, url) {
   return new Promise(resolve => {
     const image = new Image();
     image.src = url;
-    image.onload = () => resolve({name, image});
+    image.onload = () => resolve({key, image});
   });
 }
 
 function loadImagesToArray(paths, array) {
   const imagesFetchers = Object.entries(paths)
-    .map(([name, url]) => prepareImage(name, url));
+    .map(([key, url]) => prepareImage(key, url));
 
   return Promise.all(imagesFetchers)
     .then(images => array.push(...images));
