@@ -37,8 +37,6 @@ class Game {
   initializeInstanceVariables() {
     this.loadedImages = [];
     this.loadedStaticImages = [];
-
-    this.createUIReferences();
   }
 
   loadGame() {
@@ -49,30 +47,18 @@ class Game {
       this.loadDynamicResources(),
     ])
       .then(() => this.createControlUI())
-      .then(() => this.initializeCanvasController())
+      .then(() => this.createMainLayer())
       .then(() => this.stopLoading());
   }
 
   startLoading() {
-    this.disableButtons();
-
 // eslint-disable-next-line
     console.log('loading');
   }
 
   stopLoading() {
-    this.enableButtons();
-
 // eslint-disable-next-line
     console.log('stopLoading');
-  }
-
-  createUIReferences() {
-    this.elements = {
-      select: $('select'),
-      results: $('results'),
-      submit: $('submit'),
-    };
   }
 
 
@@ -101,17 +87,34 @@ class Game {
   }
 
   createControlUI() {
-    this.prepareOptions();
+    const select = document.createElement('select');
+    select.style.position = 'absolute';
+    this.prepareOptions(select);
+
+    const results = document.createElement('div');
+    results.style.position = 'absolute';
+    results.style.left = '200px';
+
+    const submit = document.createElement('button');
+    submit.style.position = 'absolute';
+    submit.style.left = '100px';
+    submit.textContent = 'spin';
+
+    const elements = {select, results, submit};
+    Object.values(elements).forEach(element => this.layers.ui.appendChild(element));
+
+    this.elements = elements;
+
     this.attachListeners();
   }
 
-  prepareOptions() {
+  prepareOptions(select) {
     this.loadedImages.forEach(({key}) => {
       const option = document.createElement('option');
       option.value = key;
       option.text = key;
 
-      this.elements.select.appendChild(option);
+      select.appendChild(option);
     });
   }
 
@@ -174,7 +177,7 @@ class Game {
     }
   }
 
-  initializeCanvasController() {
+  createMainLayer() {
     this.canvasController = new CanvasController({
       canvas: this.layers.main,
       images: this.loadedImages,
