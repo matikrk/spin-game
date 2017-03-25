@@ -134,7 +134,6 @@ class Game {
     this.canvasController = new CanvasController({
       canvas: this.elements.canvas,
       images: this.loadedImages,
-      spinTime: 1500,
     });
   }
 }

@@ -1,15 +1,32 @@
 class CanvasController {
-  constructor({canvas, spinTime = 1000, spinTimeDelta = 0, images = []}) {
+  constructor(config) {
+    this.setupConfig(config);
+    this.drawInitialScreen();
+  }
+
+  setupConfig({canvas, spinTime = 1000, spinTimeDelta = 500, images = []}) {
     this.canvas = canvas;
-    this.ctx = canvas.getContext('2d');
     this.spinTime = spinTime;
-    this.spinTimeDelta = spinTimeDelta; // later to change spin time
+    this.spinTimeDelta = spinTimeDelta;
     this.images = images;
+
+    this.ctx = canvas.getContext('2d');
+  }
+
+  drawInitialScreen() {
+    if (this.images.length > 0) {
+      this.drawImage(this.images[0].image);
+    } else {
+      this.ctx.font = '26px Arial';
+      this.ctx.fillText('Problem occurred', 10, 50);
+    }
   }
 
   drawImage(image) {
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.ctx.drawImage(image, 0, 0);
+    requestAnimationFrame(() => {
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      this.ctx.drawImage(image, 0, 0);
+    });
   }
 
   * nextImageGenerator() {
@@ -20,24 +37,25 @@ class CanvasController {
     }
   }
 
+  get finalSpinTime() {
+    return this.spinTime + (Math.random() * this.spinTimeDelta);
+  }
 
   spin(winner) {
-    return new Promise(
-      res => {
-        const nextImageIterator = this.nextImageGenerator();
+    return new Promise(res => {
+      const nextImageIterator = this.nextImageGenerator();
 
-        const interval = setInterval(() => {
-          const {value} = nextImageIterator.next();
-          this.drawImage(value);
-        }, 120);
+      const interval = setInterval(() => {
+        const {value} = nextImageIterator.next();
+        this.drawImage(value);
+      }, 120);
 
-        setTimeout(
-          () => {
-            clearInterval(interval);
-            this.drawImage(winner.image);
-            res();
-          }, this.spinTime);
-      });
+      setTimeout(() => {
+        clearInterval(interval);
+        this.drawImage(winner.image);
+        res();
+      }, this.finalSpinTime);
+    });
   }
 }
 
