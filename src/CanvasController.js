@@ -1,3 +1,5 @@
+import {promiseDelay} from './helpers';
+
 class CanvasController {
   constructor(config) {
     this.setupConfig(config);
@@ -31,7 +33,7 @@ class CanvasController {
 
   * nextImageGenerator() {
     const length = this.images.length;
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; ; i++) {
       const index = i % length;
       yield this.images[index].image;
     }
@@ -42,20 +44,23 @@ class CanvasController {
   }
 
   spin(winner) {
-    return new Promise(res => {
-      const nextImageIterator = this.nextImageGenerator();
+    const nextImageIterator = this.nextImageGenerator();
+    const visibleSlidedPeriod = 120;
 
-      const interval = setInterval(() => {
-        const {value} = nextImageIterator.next();
-        this.drawImage(value);
-      }, 120);
+    const interval = setInterval(() => {
+      const {value} = nextImageIterator.next();
+      this.drawImage(value);
+    }, visibleSlidedPeriod);
 
-      setTimeout(() => {
-        clearInterval(interval);
-        this.drawImage(winner.image);
-        res();
-      }, this.finalSpinTime);
-    });
+    const drawFinalStep = () => {
+      clearInterval(interval);
+      this.drawImage(winner.image);
+    };
+
+    return Promise.resolve()
+      .then(promiseDelay(this.finalSpinTime))
+      .then(drawFinalStep)
+      .then(promiseDelay(visibleSlidedPeriod));
   }
 }
 
