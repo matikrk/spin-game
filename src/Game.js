@@ -26,7 +26,11 @@ class Game {
     ui.style.width = `${width}px`;
     ui.style.height = `${height}px`;
 
-    const layers = {background, main, ui};
+    const loader = document.createElement('canvas');
+    loader.width = width;
+    loader.height = height;
+
+    const layers = {background, main, ui, loader};
     Object.values(layers).forEach(layer => gameBoard.appendChild(layer));
 
     gameContainer.appendChild(gameBoard);
@@ -52,13 +56,32 @@ class Game {
   }
 
   startLoading() {
-// eslint-disable-next-line
-    console.log('loading');
+    const canvas = this.layers.loader;
+    const ctx = canvas.getContext('2d');
+
+    const centerWidth = canvas.width / 2;
+    const centerHeight = canvas.height / 2;
+
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.font = '26px Arial';
+    ctx.textAlign = 'center';
+    const text = 'Loading';
+
+    const gradientRadius = ctx.measureText(text).width / 2;
+    const gradient = ctx.createLinearGradient(centerWidth - gradientRadius, 0, centerWidth + gradientRadius, 0);
+    gradient.addColorStop(0, '#ff0000');
+    gradient.addColorStop(0.5, '#00ff00');
+    gradient.addColorStop(1.0, '#0000ff');
+    ctx.fillStyle = gradient;
+
+    ctx.fillText(text, centerWidth, centerHeight);
   }
 
   stopLoading() {
-// eslint-disable-next-line
-    console.log('stopLoading');
+    const canvas = this.layers.loader;
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
   }
 
 
