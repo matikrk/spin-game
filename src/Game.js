@@ -3,6 +3,10 @@ import CanvasController from './CanvasController';
 class Game {
   constructor() {
     this.getUIReferences();
+
+    // temporary here
+    this.createBackground();
+
     this.loadResources();
     this.attachListeners();
   }
@@ -15,7 +19,15 @@ class Game {
       canvas: $('canvas'),
       results: $('results'),
       submit: $('submit'),
+      bgCanvas: $('bgCanvas'),
     };
+  }
+
+  createBackground() {
+ this.loadStaticResources()
+  }
+  loadStaticResources(){
+
   }
 
   loadResources() {
