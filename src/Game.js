@@ -4,22 +4,43 @@ import {loadImagesToArray} from './helpers';
 class Game {
   constructor() {
     this.initializeInstanceVariables();
-
-    // temporary here
-    this.createBackground();
-
-    this.loadResources();
-    this.attachListeners();
+    this.loadGame();
   }
 
   initializeInstanceVariables() {
     this.loadedImages = [];
     this.loadedStaticImages = [];
 
-    this.getUIReferences();
+    this.createUIReferences();
   }
 
-  getUIReferences() {
+  loadGame() {
+    this.startLoading();
+
+    Promise.all([
+      this.loadStaticResources().then(() => this.createBackground()),
+      this.loadDynamicResources(),
+    ])
+      .then(() => this.createControlUI())
+      .then(() => this.initializeCanvasController())
+      .then(() => this.stopLoading());
+  }
+
+  startLoading() {
+    this.disableButtons();
+
+// eslint-disable-next-line
+    console.log('loading');
+  }
+
+  stopLoading() {
+    this.enableButtons();
+
+// eslint-disable-next-line
+    console.log('stopLoading');
+  }
+
+  createUIReferences() {
     const $ = id => document.getElementById(id);
 
     this.elements = {
@@ -31,9 +52,6 @@ class Game {
     };
   }
 
-  createBackground() {
-    this.loadStaticResources();
-  }
 
   loadStaticResources() {
     const paths = {
@@ -45,17 +63,20 @@ class Game {
   }
 
 
-  loadResources() {
-    this.startLoading();
+  createBackground() {
+  }
 
+  loadDynamicResources() {
     const symbolsPath = '/rest/symbols.json';
 
-    fetch(symbolsPath)
+    return fetch(symbolsPath)
       .then(response => response.json())
       .then(data => this.prepareOptions(data))
-      .then(data => this.prepareImages(data))
-      .then(() => this.initializeCanvasController())
-      .then(() => this.stopLoading());
+      .then(data => this.prepareImages(data));
+  }
+
+  createControlUI() {
+    this.attachListeners();
   }
 
   prepareOptions(data) {
@@ -74,22 +95,8 @@ class Game {
     return loadImagesToArray(data, this.loadedImages);
   }
 
-  startLoading() {
-    this.disableButtons();
-
-// eslint-disable-next-line
-    console.log('loading');
-  }
-
-  stopLoading() {
-    this.enableButtons();
-
-// eslint-disable-next-line
-    console.log('stopLoading');
-  }
-
   attachListeners() {
-    this.elements.submit.addEventListener('click', this.onSubmit.bind(this));
+    this.elements.submit.addEventListener('click', () => this.onSubmit());
   }
 
   onSubmit() {
