@@ -1,12 +1,12 @@
 export default {
   gameBoard: {
     width: 640,
-    height: 240,
+    height: 280,
   },
   elementsPosition: {
     submit: {
       x: 500,
-      y: 20,
+      y: 30,
       width: 98,
       height: 98,
       margin: 3,
@@ -15,18 +15,16 @@ export default {
       x: 10,
       y: 190,
       width: 610,
-      height: 40,
-      margin: 5,
     },
     spinner: {
-      x: 150,
+      x: 200,
       y: 10,
       width: 235,
       height: 155,
       margin: 5,
     },
     scoreBoard: {
-      x: 10,
+      x: 20,
       y: 10,
       width: 100,
       height: 155,

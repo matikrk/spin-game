@@ -36,7 +36,7 @@ class Background {
     this.drawSpinnerHole();
     this.drawButtonHole();
     this.drawScoreBoard();
-    this.drawSelectHole();
+   // this.drawSelectHole();
   }
 
   drawBgImage() {
