@@ -1,5 +1,9 @@
-import CanvasController from './CanvasController';
-import {loadImagesToArray, promiseDelay, setElementPosition} from './helpers';
+import CanvasController from './layers/CanvasController';
+import BackgroundController from './layers/BackgroundController';
+import UIController from './layers/UIController';
+import LoaderController from './layers/LoaderController';
+
+import {loadImagesToArray, promiseDelay} from './helpers';
 import config from './config';
 
 class Game {
@@ -48,6 +52,7 @@ class Game {
   initializeInstanceVariables() {
     this.loadedImages = [];
     this.loadedStaticImages = [];
+    this.layersControlers = {};
   }
 
   loadGame() {
@@ -62,32 +67,22 @@ class Game {
       .then(() => this.stopLoading());
   }
 
+  createBackground() {
+    this.layersControlers.backgroundController = new BackgroundController({
+      canvas: this.layers.background,
+      images: this.loadedStaticImages,
+    });
+  }
+
   startLoading() {
-    const canvas = this.layers.loader;
-    const ctx = canvas.getContext('2d');
-
-    const centerWidth = canvas.width / 2;
-    const centerHeight = canvas.height / 2;
-
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    ctx.font = '26px Arial';
-    ctx.textAlign = 'center';
-    const text = 'Loading';
-
-    const gradientRadius = ctx.measureText(text).width / 2;
-    const gradient = ctx.createLinearGradient(centerWidth - gradientRadius, 0, centerWidth + gradientRadius, 0);
-    gradient.addColorStop(0, '#ff0000');
-    gradient.addColorStop(0.5, '#00ff00');
-    gradient.addColorStop(1.0, '#0000ff');
-    ctx.fillStyle = gradient;
-
-    ctx.fillText(text, centerWidth, centerHeight);
+    this.layersControlers.loaderController = new LoaderController({
+      canvas: this.layers.loader,
+    });
+    this.layersControlers.loaderController.startLoading();
   }
 
   stopLoading() {
-    const canvas = this.layers.loader;
-    canvas.style.display = 'none';
+    this.layersControlers.loaderController.stopLoading();
   }
 
 
@@ -100,78 +95,6 @@ class Game {
     return loadImagesToArray(paths, this.loadedStaticImages);
   }
 
-  createBackground() {
-    const background = this.layers.background;
-    const ctx = background.getContext('2d');
-
-    // bg image
-    const {image} = this.loadedStaticImages.find(({key}) => key === 'bg');
-    const {width, height} = config.gameBoard;
-    ctx.drawImage(image, 0, 0, width, height);
-
-    // spinner hole
-    this.drawSpinnerHole();
-
-    this.drawButtonHole();
-    this.drawScoreBoard();
-  }
-
-  drawSpinnerHole() {
-    const background = this.layers.background;
-    const ctx = background.getContext('2d');
-
-    const {x, y, width, height} = config.elementsPosition.spinner;
-
-    const padding = {
-      x: 5,
-      y: 5,
-    };
-
-    //  can use quadraticCurveTo rounded, but take a lot time
-    ctx.rect(x - padding.x, y - padding.y, width + (2 * padding.x), height + (2 * padding.y));
-
-    ctx.strokeStyle = '#40300e';
-    ctx.stroke();
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
-    ctx.fill();
-  }
-
-  drawButtonHole() {
-    const background = this.layers.background;
-    const ctx = background.getContext('2d');
-
-    const {x, y, width} = config.elementsPosition.submit;
-    const padding = 3;
-    const radius = (width / 2) + padding;
-
-    ctx.arc(x + radius, y + radius, radius, 0, 2 * Math.PI);
-
-    ctx.strokeStyle = '#40300e';
-    ctx.stroke();
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
-    ctx.fill();
-  }
-
-  drawScoreBoard() {
-    const background = this.layers.background;
-    const ctx = background.getContext('2d');
-
-    const {x, y, width, height} = config.elementsPosition.results;
-
-    const padding = {
-      x: 5,
-      y: 5,
-    };
-
-    //  can use quadraticCurveTo rounded, but take a lot time
-    ctx.rect(x - padding.x, y - padding.y, width + (2 * padding.x), height + (2 * padding.y));
-
-    ctx.strokeStyle = '#40300e';
-    ctx.stroke();
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
-    ctx.fill();
-  }
-
   loadDynamicResources() {
     const symbolsPath = '/rest/symbols.json';
 
@@ -182,33 +105,11 @@ class Game {
 
 
   createControlUI() {
-    const select = document.createElement('select');
-    setElementPosition(select, 'select');
-    this.prepareOptions(select);
-
-    const results = document.createElement('div');
-    results.style.color = '#fff';
-    setElementPosition(results, 'results');
-
-    const submit = document.createElement('button');
-    setElementPosition(submit, 'submit');
-    submit.textContent = 'spin';
-
-    const elements = {select, results, submit};
-    Object.values(elements).forEach(element => this.layers.ui.appendChild(element));
-
-    this.elements = elements;
-
-    this.attachListeners();
-  }
-
-  prepareOptions(select) {
-    this.loadedImages.forEach(({key}) => {
-      const option = document.createElement('option');
-      option.value = key;
-      option.text = key;
-
-      select.appendChild(option);
+    this.layersControlers.uiController = new UIController({
+      container: this.layers.ui,
+      images: this.loadedStaticImages,
+      selectImages: this.loadedImages,
+      onSubmit: () => this.onSubmit(),
     });
   }
 
@@ -216,9 +117,6 @@ class Game {
     return loadImagesToArray(data, this.loadedImages);
   }
 
-  attachListeners() {
-    this.elements.submit.addEventListener('click', () => this.onSubmit());
-  }
 
   onSubmit() {
     this.disableButtons();
@@ -229,13 +127,11 @@ class Game {
   }
 
   disableButtons() {
-    this.elements.submit.disabled = true;
-    this.elements.select.disabled = true;
+    this.layersControlers.uiController.disableButtons();
   }
 
   enableButtons() {
-    this.elements.submit.disabled = false;
-    this.elements.select.disabled = false;
+    this.layersControlers.uiController.enableButtons();
   }
 
   spin() {
@@ -250,19 +146,19 @@ class Game {
   }
 
   onWait() {
-    this.elements.results.textContent = 'Wait for it :)';
+    this.layersControlers.uiController.elements.results.textContent = 'Wait for it :)';
   }
 
   onWin() {
-    this.elements.results.textContent = 'Win';
+    this.layersControlers.uiController.elements.results.textContent = 'Win';
   }
 
   onLoose() {
-    this.elements.results.textContent = 'Lose';
+    this.layersControlers.uiController.elements.results.textContent = 'Lose';
   }
 
   updateScoreBoard(winnerKey) {
-    const selected = this.elements.select.value;
+    const selected = this.layersControlers.uiController.elements.select.value;
 
     if (winnerKey === selected) {
       this.onWin();

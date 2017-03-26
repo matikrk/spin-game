@@ -1,5 +1,5 @@
-import {promiseDelay} from './helpers';
-import config from './config';
+import {promiseDelay} from '../helpers';
+import config from '../config';
 
 class CanvasController {
   constructor(cfg) {
