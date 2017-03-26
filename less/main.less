@@ -5,10 +5,26 @@
   &__btnSpin {
     border-radius: 50%;
     cursor: pointer;
-    background: center no-repeat  url('/img/btnSpin.png');
+    background: center no-repeat url('/img/btnSpin.png');
     &--disabled {
       background-image: url('/img/btnSpinD.png');
       cursor: not-allowed;
+    }
+  }
+  &__select {
+    display: flex;
+    justify-content: space-around;
+
+    &-item {
+      width: auto;
+      &--active {
+        border-color: aqua;
+      }
+    img{
+      max-width:100%;
+      max-height:100%;
+    }
+
     }
   }
 }

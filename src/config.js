@@ -13,9 +13,9 @@ export default {
     },
     select: {
       x: 10,
-      y: 200,
-      width: 600,
-      height: 30,
+      y: 190,
+      width: 610,
+      height: 40,
       margin: 5,
     },
     spinner: {

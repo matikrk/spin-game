@@ -135,7 +135,7 @@ class Game {
   }
 
   updateScoreBoard(winnerKey) {
-    const selected = this.layers.ui.elements.select.value;
+    const selected = this.layers.ui.getSelectedValue();
 
     if (winnerKey === selected) {
       this.onWin();
