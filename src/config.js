@@ -8,6 +8,8 @@ export default {
       x: 500,
       y: 20,
       width: 98,
+      height: 98,
+      margin: 3,
     },
     select: {
       x: 500,
@@ -19,12 +21,14 @@ export default {
       y: 10,
       width: 235,
       height: 155,
+      margin: 5,
     },
     results: {
       x: 10,
       y: 10,
       width: 100,
       height: 155,
+      margin: 5,
     },
   },
 };

@@ -34,9 +34,9 @@ class UI {
     results.style.color = '#fff';
     setElementPosition(results, 'results');
 
-    const submit = document.createElement('button');
+    const submit = document.createElement('div');
+    submit.classList.add('game-board__btnSpin');
     setElementPosition(submit, 'submit');
-    submit.textContent = 'spin';
 
     const elements = {select, results, submit};
     Object.values(elements).forEach(element => this.container.appendChild(element));
@@ -61,13 +61,17 @@ class UI {
   }
 
   disableButtons() {
-    this.elements.submit.disabled = true;
+    this.elements.submit.classList.add('game-board__btnSpin--disabled');
     this.elements.select.disabled = true;
   }
 
   enableButtons() {
-    this.elements.submit.disabled = false;
+    this.elements.submit.classList.remove('game-board__btnSpin--disabled');
     this.elements.select.disabled = false;
+  }
+
+  changeResultText(text) {
+    this.elements.results.textContent = text;
   }
 
 }

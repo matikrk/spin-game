@@ -2,4 +2,13 @@
   &__layer {
     position: absolute;
   }
+  &__btnSpin {
+    border-radius: 50%;
+    cursor: pointer;
+    background: center no-repeat  url('/img/btnSpin.png');
+    &--disabled {
+      background-image: url('/img/btnSpinD.png');
+      cursor: not-allowed;
+    }
+  }
 }

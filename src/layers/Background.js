@@ -51,13 +51,9 @@ class Background {
     const ctx = this.ctx;
     ctx.beginPath();
 
-    const {x, y, width, height} = config.elementsPosition.spinner;
-    const padding = {
-      x: 5,
-      y: 5,
-    };
+    const {x, y, width, height, margin} = config.elementsPosition.spinner;
 
-    ctx.rect(x - padding.x, y - padding.y, width + (2 * padding.x), height + (2 * padding.y));
+    ctx.rect(x - margin, y - margin, width + (2 * margin), height + (2 * margin));
     drawFigure(ctx);
   }
 
@@ -65,9 +61,8 @@ class Background {
     const ctx = this.ctx;
     ctx.beginPath();
 
-    const {x, y, width} = config.elementsPosition.submit;
-    const padding = 3;
-    const radius = (width / 2) + padding;
+    const {x, y, width, margin} = config.elementsPosition.submit;
+    const radius = (width / 2) + margin;
 
     ctx.arc(x + radius, y + radius, radius, 0, 2 * Math.PI);
     drawFigure(ctx);
@@ -77,14 +72,10 @@ class Background {
     const ctx = this.ctx;
     ctx.beginPath();
 
-    const {x, y, width, height} = config.elementsPosition.results;
+    const {x, y, width, height, margin} = config.elementsPosition.results;
 
-    const padding = {
-      x: 5,
-      y: 5,
-    };
 
-    ctx.rect(x - padding.x, y - padding.y, width + (2 * padding.x), height + (2 * padding.y));
+    ctx.rect(x - margin, y - margin, width + (2 * margin), height + (2 * margin));
     drawFigure(ctx);
   }
 }

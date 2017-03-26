@@ -67,8 +67,8 @@ class Game {
   loadStaticResources() {
     const paths = {
       bg: '/img/bg.png',
-      btSpin: '/img/btnSpin.png',
-      btSpinD: '/img/btnSpinD.png',
+      btnSpin: '/img/btnSpin.png',
+      btnSpinD: '/img/btnSpinD.png',
     };
     return loadImagesToArray(paths, this.loadedStaticImages);
   }
@@ -123,15 +123,15 @@ class Game {
   }
 
   onWait() {
-    this.layers.ui.elements.results.textContent = 'Wait for it :)';
+    this.layers.ui.changeResultText('Wait for it :)');
   }
 
   onWin() {
-    this.layers.ui.elements.results.textContent = 'Win';
+    this.layers.ui.changeResultText('Win');
   }
 
   onLoose() {
-    this.layers.ui.elements.results.textContent = 'Lose';
+    this.layers.ui.changeResultText('Lose');
   }
 
   updateScoreBoard(winnerKey) {
