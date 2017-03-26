@@ -12,9 +12,11 @@ export default {
       margin: 3,
     },
     select: {
-      x: 500,
-      y: 160,
-
+      x: 10,
+      y: 200,
+      width: 600,
+      height: 30,
+      margin: 5,
     },
     spinner: {
       x: 150,
@@ -23,7 +25,7 @@ export default {
       height: 155,
       margin: 5,
     },
-    results: {
+    scoreBoard: {
       x: 10,
       y: 10,
       width: 100,

@@ -30,15 +30,15 @@ class UI {
     setElementPosition(select, 'select');
     this.prepareOptions(select);
 
-    const results = document.createElement('div');
-    results.style.color = '#fff';
-    setElementPosition(results, 'results');
+    const scoreBoard = document.createElement('div');
+    scoreBoard.style.color = '#fff';
+    setElementPosition(scoreBoard, 'scoreBoard');
 
     const submit = document.createElement('div');
     submit.classList.add('game-board__btnSpin');
     setElementPosition(submit, 'submit');
 
-    const elements = {select, results, submit};
+    const elements = {select, scoreBoard, submit};
     Object.values(elements).forEach(element => this.container.appendChild(element));
 
     this.elements = elements;
@@ -71,7 +71,7 @@ class UI {
   }
 
   changeResultText(text) {
-    this.elements.results.textContent = text;
+    this.elements.scoreBoard.textContent = text;
   }
 
 }

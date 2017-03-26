@@ -36,6 +36,7 @@ class Background {
     this.drawSpinnerHole();
     this.drawButtonHole();
     this.drawScoreBoard();
+    this.drawSelectHole();
   }
 
   drawBgImage() {
@@ -72,8 +73,17 @@ class Background {
     const ctx = this.ctx;
     ctx.beginPath();
 
-    const {x, y, width, height, margin} = config.elementsPosition.results;
+    const {x, y, width, height, margin} = config.elementsPosition.scoreBoard;
 
+    ctx.rect(x - margin, y - margin, width + (2 * margin), height + (2 * margin));
+    drawFigure(ctx);
+  }
+
+  drawSelectHole() {
+    const ctx = this.ctx;
+    ctx.beginPath();
+
+    const {x, y, width, height, margin} = config.elementsPosition.select;
 
     ctx.rect(x - margin, y - margin, width + (2 * margin), height + (2 * margin));
     drawFigure(ctx);
