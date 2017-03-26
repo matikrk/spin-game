@@ -6,10 +6,11 @@
   "license": "MIT",
   "scripts": {
     "start": "webpack-dev-server",
-    "build": "rimraf build && webpack --config webpack.config.js",
-    "build:development": "rimraf build && webpack --config webpack.config.js",
+    "build": "npm run prepareBuildFolder &&  webpack --config webpack.config.js",
+    "build:development": "npm run prepareBuildFolder && webpack --config webpack.config.js",
     "test": "ava ./tests/**/*.js",
-    "lint": "eslint src/ tests/"
+    "lint": "eslint src/ tests/",
+    "prepareBuildFolder":"rimraf build && cpr ./img ./build/img && cpr ./rest ./build/rest ./build/rest && cpr ./index.html ./build/index.html"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.7",
@@ -29,6 +30,9 @@
     "rimraf": "^2.6.1",
     "style-loader": "^0.15.0",
     "webpack": "^2.2.1",
-    "webpack-dev-server": "^2.4.2"
+    "webpack-dev-server": "^2.4.2",
+    "cpr": "^2.0.2"
+  },
+  "dependencies": {
   }
 }

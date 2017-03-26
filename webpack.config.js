@@ -10,11 +10,11 @@ const webpack = require('webpack');
 const plugins = [
   new ExtractTextPlugin("style.css"),
 ];
+
 const output = {
   filename: 'main.js',
-  publicPath: 'build/',
-  path : path.resolve(__dirname, 'build')
-
+  publicPath: 'res/',
+  path : path.resolve(__dirname, 'build/res'),
 };
 
 if (isProductionBuild) {

@@ -103,8 +103,73 @@ class Game {
   createBackground() {
     const background = this.layers.background;
     const ctx = background.getContext('2d');
+
+    // bg image
     const {image} = this.loadedStaticImages.find(({key}) => key === 'bg');
-    ctx.drawImage(image, 0, 0);
+    const {width, height} = config.gameBoard;
+    ctx.drawImage(image, 0, 0, width, height);
+
+    // spinner hole
+    this.drawSpinnerHole();
+
+    this.drawButtonHole();
+    this.drawScoreBoard();
+  }
+
+  drawSpinnerHole() {
+    const background = this.layers.background;
+    const ctx = background.getContext('2d');
+
+    const {x, y, width, height} = config.elementsPosition.spinner;
+
+    const padding = {
+      x: 5,
+      y: 5,
+    };
+
+    //  can use quadraticCurveTo rounded, but take a lot time
+    ctx.rect(x - padding.x, y - padding.y, width + (2 * padding.x), height + (2 * padding.y));
+
+    ctx.strokeStyle = '#40300e';
+    ctx.stroke();
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+    ctx.fill();
+  }
+
+  drawButtonHole() {
+    const background = this.layers.background;
+    const ctx = background.getContext('2d');
+
+    const {x, y, width} = config.elementsPosition.submit;
+    const padding = 3;
+    const radius = (width / 2) + padding;
+
+    ctx.arc(x + radius, y + radius, radius, 0, 2 * Math.PI);
+
+    ctx.strokeStyle = '#40300e';
+    ctx.stroke();
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+    ctx.fill();
+  }
+
+  drawScoreBoard() {
+    const background = this.layers.background;
+    const ctx = background.getContext('2d');
+
+    const {x, y, width, height} = config.elementsPosition.results;
+
+    const padding = {
+      x: 5,
+      y: 5,
+    };
+
+    //  can use quadraticCurveTo rounded, but take a lot time
+    ctx.rect(x - padding.x, y - padding.y, width + (2 * padding.x), height + (2 * padding.y));
+
+    ctx.strokeStyle = '#40300e';
+    ctx.stroke();
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+    ctx.fill();
   }
 
   loadDynamicResources() {
@@ -193,7 +258,7 @@ class Game {
   }
 
   onLoose() {
-    this.elements.results.textContent = 'Loose';
+    this.elements.results.textContent = 'Lose';
   }
 
   updateScoreBoard(winnerKey) {
