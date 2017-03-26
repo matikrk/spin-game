@@ -2,12 +2,22 @@ import config from '../config';
 
 
 class LoaderController {
-  constructor({canvas}) {
+  constructor() {
+    const {width, height} = config.gameBoard;
+
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    canvas.style.zIndex = 4;
     this.canvas = canvas;
     this.ctx = this.canvas.getContext('2d');
   }
 
-  startLoading() {
+  get domNode() {
+    return this.canvas;
+  }
+
+  render() {
     const ctx = this.ctx;
     const {width, height} = config.gameBoard;
     const centerWidth = width / 2;
@@ -29,7 +39,7 @@ class LoaderController {
     ctx.fillText(text, centerWidth, centerHeight);
   }
 
-  stopLoading() {
+  hide() {
     const canvas = this.canvas;
     canvas.style.display = 'none';
   }

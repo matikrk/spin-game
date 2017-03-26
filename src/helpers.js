@@ -22,8 +22,8 @@ function loadImagesToArray(paths, array) {
 
 
 /* eslint-disable no-param-reassign*/
-function setElementPosition(elem, name) {
-  const {elementsPosition: {[name]: {x, y}}} = config;
+function setElementPosition(elem, key) {
+  const {elementsPosition: {[key]: {x, y}}} = config;
   elem.style.position = 'absolute';
   elem.style.left = `${x}px`;
   elem.style.top = `${y}px`;

@@ -1,15 +1,37 @@
 import config from '../config';
 
-class BackgroundController {
-  constructor({canvas, images = []}) {
-    this.canvas = canvas;
-    this.loadedStaticImages = images;
-    this.ctx = this.canvas.getContext('2d');
 
-    this.createBackground();
+/* eslint-disable no-param-reassign*/
+function drawFigure(ctx) {
+  const strokeStyle = '#40300e';
+  const fillStyle = 'rgba(255, 255, 255, 0.5)';
+
+  ctx.strokeStyle = strokeStyle;
+  ctx.stroke();
+  ctx.fillStyle = fillStyle;
+  ctx.fill();
+}
+/* eslint-enable no-param-reassign*/
+
+class BackgroundController {
+  constructor() {
+    const {width, height} = config.gameBoard;
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    canvas.style.zIndex = 1;
+
+    this.canvas = canvas;
+    this.ctx = this.canvas.getContext('2d');
   }
 
-  createBackground() {
+  get domNode() {
+    return this.canvas;
+  }
+
+  render({images = []}) {
+    this.loadedStaticImages = images;
+
     this.drawBgImage();
     this.drawSpinnerHole();
     this.drawButtonHole();
@@ -18,14 +40,13 @@ class BackgroundController {
 
   drawBgImage() {
     const ctx = this.ctx;
-    ctx.beginPath();
 
-    // bg image
     const {image} = this.loadedStaticImages.find(({key}) => key === 'bg');
     const {width, height} = config.gameBoard;
     ctx.drawImage(image, 0, 0, width, height);
   }
 
+  //  can use quadraticCurveTo to created rounded boxes, but it take a lot time
   drawSpinnerHole() {
     const ctx = this.ctx;
     ctx.beginPath();
@@ -36,12 +57,8 @@ class BackgroundController {
       y: 5,
     };
 
-    //  can use quadraticCurveTo rounded, but take a lot time
     ctx.rect(x - padding.x, y - padding.y, width + (2 * padding.x), height + (2 * padding.y));
-    ctx.strokeStyle = '#40300e';
-    ctx.stroke();
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
-    ctx.fill();
+    drawFigure(ctx);
   }
 
   drawButtonHole() {
@@ -53,11 +70,7 @@ class BackgroundController {
     const radius = (width / 2) + padding;
 
     ctx.arc(x + radius, y + radius, radius, 0, 2 * Math.PI);
-
-    ctx.strokeStyle = '#40300e';
-    ctx.stroke();
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
-    ctx.fill();
+    drawFigure(ctx);
   }
 
   drawScoreBoard() {
@@ -71,16 +84,9 @@ class BackgroundController {
       y: 5,
     };
 
-    //  can use quadraticCurveTo rounded, but take a lot time
     ctx.rect(x - padding.x, y - padding.y, width + (2 * padding.x), height + (2 * padding.y));
-
-    ctx.strokeStyle = '#40300e';
-    ctx.stroke();
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
-    ctx.fill();
+    drawFigure(ctx);
   }
-
-
 }
 
 export default BackgroundController;

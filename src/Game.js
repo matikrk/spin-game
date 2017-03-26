@@ -4,7 +4,6 @@ import UIController from './layers/UIController';
 import LoaderController from './layers/LoaderController';
 
 import {loadImagesToArray, promiseDelay} from './helpers';
-import config from './config';
 
 class Game {
   constructor(gameContainer) {
@@ -13,46 +12,30 @@ class Game {
     this.loadGame();
   }
 
-  createGameLayers(gameContainer = document.body) {
-    const gameBoard = document.createElement('div');
-    gameBoard.classList.add('game-board');
-    const {width, height} = config.gameBoard;
-
-    const background = document.createElement('canvas');
-    background.width = width;
-    background.height = height;
-    background.style.zIndex = 1;
-
-    const main = document.createElement('canvas');
-    main.width = width;
-    main.height = height;
-    main.style.zIndex = 2;
-
-    const ui = document.createElement('div');
-    ui.style.width = `${width}px`;
-    ui.style.height = `${height}px`;
-    ui.style.zIndex = 3;
-
-    const loader = document.createElement('canvas');
-    loader.width = width;
-    loader.height = height;
-    loader.style.zIndex = 4;
-
-    const layers = {background, main, ui, loader};
-    Object.values(layers).forEach(layer => {
-      layer.classList.add('game-board__layer');
-      gameBoard.appendChild(layer);
-    });
-
-    gameContainer.appendChild(gameBoard);
-
-    this.layers = layers;
-  }
-
   initializeInstanceVariables() {
     this.loadedImages = [];
     this.loadedStaticImages = [];
     this.layersControlers = {};
+  }
+
+  createGameLayers(gameContainer = document.body) {
+    const gameBoard = document.createElement('div');
+    gameBoard.classList.add('game-board');
+
+    this.layersControlers = {
+      mainController: new CanvasController(),
+      uiController: new UIController(),
+      loaderController: new LoaderController(),
+      backgroundController: new BackgroundController(),
+    };
+
+    Object.values(this.layersControlers)
+      .forEach(({domNode}) => {
+        domNode.classList.add('game-board__layer');
+        gameBoard.appendChild(domNode);
+      });
+
+    gameContainer.appendChild(gameBoard);
   }
 
   loadGame() {
@@ -68,21 +51,17 @@ class Game {
   }
 
   createBackground() {
-    this.layersControlers.backgroundController = new BackgroundController({
-      canvas: this.layers.background,
+    this.layersControlers.backgroundController.render({
       images: this.loadedStaticImages,
     });
   }
 
   startLoading() {
-    this.layersControlers.loaderController = new LoaderController({
-      canvas: this.layers.loader,
-    });
-    this.layersControlers.loaderController.startLoading();
+    this.layersControlers.loaderController.render();
   }
 
   stopLoading() {
-    this.layersControlers.loaderController.stopLoading();
+    this.layersControlers.loaderController.hide();
   }
 
 
@@ -105,8 +84,7 @@ class Game {
 
 
   createControlUI() {
-    this.layersControlers.uiController = new UIController({
-      container: this.layers.ui,
+    this.layersControlers.uiController.render({
       images: this.loadedStaticImages,
       selectImages: this.loadedImages,
       onSubmit: () => this.onSubmit(),
@@ -140,7 +118,7 @@ class Game {
       const winnerIndex = Math.floor(Math.random() * this.loadedImages.length);
       const winner = this.loadedImages[winnerIndex];
 
-      this.canvasController.spin(winner)
+      this.layersControlers.mainController.spin(winner)
         .then(() => resolve(winner.key));
     });
   }
@@ -168,10 +146,7 @@ class Game {
   }
 
   createMainLayer() {
-    this.canvasController = new CanvasController({
-      canvas: this.layers.main,
-      images: this.loadedImages,
-    });
+    this.layersControlers.mainController.render({images: this.loadedImages});
   }
 }
 

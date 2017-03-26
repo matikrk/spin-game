@@ -1,14 +1,29 @@
+import config from '../config';
 import {setElementPosition} from '../helpers';
 
 class UIController {
-  constructor({container, images, selectImages, onSubmit}) {
+  constructor() {
+    const {width, height} = config.gameBoard;
+
+    const container = document.createElement('div');
+    container.style.width = `${width}px`;
+    container.style.height = `${height}px`;
+    container.style.zIndex = 3;
+
+    this.container = container;
+  }
+
+  get domNode() {
+    return this.container;
+  }
+
+  render({images, selectImages, onSubmit}) {
     this.onSubmit = onSubmit;
     this.images = images;
     this.selectImages = selectImages;
-    this.container = container;
+
     this.createControlUI();
   }
-
 
   createControlUI() {
     const select = document.createElement('select');

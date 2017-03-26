@@ -2,18 +2,31 @@ import {promiseDelay} from '../helpers';
 import config from '../config';
 
 class CanvasController {
-  constructor(cfg) {
+  constructor(cfg = {}) {
     this.setupConfig(cfg);
+    const {width, height} = config.gameBoard;
+
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    canvas.style.zIndex = 2;
+
+    this.canvas = canvas;
+    this.ctx = canvas.getContext('2d');
+  }
+
+  get domNode() {
+    return this.canvas;
+  }
+
+  render({images = []}) {
+    this.images = images;
     this.drawInitialScreen();
   }
 
-  setupConfig({canvas, spinTime = 1000, spinTimeDelta = 500, images = []}) {
-    this.canvas = canvas;
+  setupConfig({spinTime = 1000, spinTimeDelta = 500}) {
     this.spinTime = spinTime;
     this.spinTimeDelta = spinTimeDelta;
-    this.images = images;
-
-    this.ctx = canvas.getContext('2d');
   }
 
   drawInitialScreen() {
