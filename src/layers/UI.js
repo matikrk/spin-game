@@ -1,7 +1,7 @@
 import config from '../config';
 import {setElementPosition} from '../helpers';
 
-class UIController {
+class UI {
   constructor() {
     const {width, height} = config.gameBoard;
 
@@ -71,4 +71,4 @@ class UIController {
   }
 
 }
-export default UIController;
+export default UI;

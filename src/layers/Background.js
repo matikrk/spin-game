@@ -13,7 +13,7 @@ function drawFigure(ctx) {
 }
 /* eslint-enable no-param-reassign*/
 
-class BackgroundController {
+class Background {
   constructor() {
     const {width, height} = config.gameBoard;
     const canvas = document.createElement('canvas');
@@ -89,4 +89,4 @@ class BackgroundController {
   }
 }
 
-export default BackgroundController;
+export default Background;

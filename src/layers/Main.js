@@ -1,7 +1,7 @@
 import {promiseDelay} from '../helpers';
 import config from '../config';
 
-class CanvasController {
+class Main {
   constructor(cfg = {}) {
     this.setupConfig(cfg);
     const {width, height} = config.gameBoard;
@@ -82,4 +82,4 @@ class CanvasController {
   }
 }
 
-export default CanvasController;
+export default Main;

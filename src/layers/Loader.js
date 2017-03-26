@@ -1,7 +1,7 @@
 import config from '../config';
 
 
-class LoaderController {
+class Loader {
   constructor() {
     const {width, height} = config.gameBoard;
 
@@ -46,4 +46,4 @@ class LoaderController {
 
 }
 
-export default LoaderController;
+export default Loader;
