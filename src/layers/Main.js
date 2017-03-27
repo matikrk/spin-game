@@ -36,6 +36,7 @@ class Main {
       this.ctx.font = '26px Arial';
       this.ctx.fillText('Problem occurred', 10, 50);
     }
+    this.changeResultText();
   }
 
   drawImage(image) {
@@ -79,6 +80,23 @@ class Main {
     return promiseDelay(this.finalSpinTime)()
       .then(drawFinalStep)
       .then(promiseDelay(visibleSlidedPeriod));
+  }
+
+  changeResultText({win = 0, lose = 0} = {}) {
+    const {x, y, width, height} = config.elementsPosition.scoreBoard;
+    const centerWidth = x + (width / 2);
+    const gap = height / 5;
+    const ctx = this.ctx;
+    requestAnimationFrame(() => {
+      ctx.textAlign = 'center';
+      ctx.font = '24px Arial';
+
+      ctx.clearRect(x, y, width, height);
+      ctx.fillText('WIN', centerWidth, y + gap);
+      ctx.fillText(win.toString(), centerWidth, y + (2 * gap));
+      ctx.fillText('LOSE', centerWidth, y + (3 * gap));
+      ctx.fillText(lose.toString(), centerWidth, y + (4 * gap));
+    });
   }
 }
 

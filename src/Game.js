@@ -121,24 +121,17 @@ class Game {
     });
   }
 
-  onWin() {
-    this.scoreBoard.win++;
-    this.layers.ui.changeResultText(this.scoreBoard);
-  }
-
-  onLoose() {
-    this.scoreBoard.lose++;
-    this.layers.ui.changeResultText(this.scoreBoard);
-  }
 
   updateScoreBoard(winnerKey) {
     const selected = this.layers.ui.getSelectedValue();
 
     if (winnerKey === selected) {
-      this.onWin();
+      this.scoreBoard.win++;
     } else {
-      this.onLoose();
+      this.scoreBoard.lose++;
     }
+
+    this.layers.main.changeResultText(this.scoreBoard);
   }
 
   createMainLayer() {

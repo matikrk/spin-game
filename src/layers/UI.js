@@ -11,7 +11,6 @@ class UI {
     container.style.zIndex = 3;
 
     this.selectedValue = undefined;
-
     this.container = container;
   }
 
@@ -26,7 +25,6 @@ class UI {
 
     this.createControlUI();
     this.changeSelectedValue(this.selectImages[0].key);
-    this.changeResultText();
   }
 
   createControlUI() {
@@ -35,14 +33,12 @@ class UI {
     select.classList.add('game-board__select');
     this.prepareOptions(select);
 
-    const scoreBoard = document.createElement('div');
-    setElementPosition(scoreBoard, 'scoreBoard');
 
     const submit = document.createElement('div');
     submit.classList.add('game-board__btnSpin');
     setElementPosition(submit, 'submit');
 
-    const elements = {select, scoreBoard, submit};
+    const elements = {select, submit};
     Object.values(elements).forEach(element => this.container.appendChild(element));
 
     this.elements = elements;
@@ -113,10 +109,6 @@ class UI {
     this.elements.submit.classList.remove('game-board__btnSpin--disabled');
     this.spinnerDisabled = false;
     this.enableSelecting();
-  }
-
-  changeResultText({win = 0, lose = 0} = {}) {
-    this.elements.scoreBoard.textContent = `win: ${win}, \n lose: ${lose}`;
   }
 
 }
