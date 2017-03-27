@@ -47,18 +47,6 @@ class Main {
     });
   }
 
-  * nextImageGenerator() {
-    const length = this.images.length;
-    let i = 0;
-
-    // eslint-disable-next-line
-    while (true) {
-      const index = i % length;
-      yield this.images[index].image;
-      i++;
-    }
-  }
-
   getImageByModuloIndex(num) {
     const length = this.images.length;
     const index = num % length;
@@ -85,30 +73,30 @@ class Main {
   }
 
   spin(winner) {
-    const nextImageIterator = this.nextImageGenerator();
-    const visibleSlidedPeriod = 12;
-
-    // const interval = setInterval(() => {
-    //   const {value} = nextImageIterator.next();
-    //   this.drawImage(value);
-    // }, visibleSlidedPeriod);
-
+    let shouldSpin = true;
     const startTime = +new Date();
-    const interval = setInterval(() => {
-      const deltaTime = +new Date() - startTime;
-      const speed = 2; // 1 slided/ms
-      this.drawSpinClip(speed * deltaTime);
-    }, visibleSlidedPeriod);
 
+    const spinning = () => {
+      requestAnimationFrame(() => {
+        const deltaTime = +new Date() - startTime;
+        const speed = 2; //  slided/ms
+        this.drawSpinClip(speed * deltaTime);
+        if (shouldSpin) {
+          spinning();
+        }
+      });
+    };
+
+    spinning();
 
     const drawFinalStep = () => {
-      clearInterval(interval);
+      shouldSpin = false;
       this.drawImage(winner.image);
     };
 
     return promiseDelay(this.finalSpinTime)()
       .then(drawFinalStep)
-      .then(promiseDelay(visibleSlidedPeriod));
+      .then(promiseDelay(12));
   }
 
   changeResultText({win = 0, lose = 0} = {}) {
