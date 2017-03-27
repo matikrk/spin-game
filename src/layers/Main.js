@@ -39,9 +39,9 @@ class Main {
   }
 
   drawImage(image) {
-    const {gameBoard: {width: canvasWidth, height: canvasHeight}, elementsPosition: {spinner: {x, y}}} = config;
+    const {x, y, width, height} = config.elementsPosition.spinner;
     requestAnimationFrame(() => {
-      this.ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+      this.ctx.clearRect(x, y, width, height);
       this.ctx.drawImage(image, x, y);
     });
   }

@@ -6,7 +6,8 @@ import LoaderLayer from './layers/Loader';
 import {loadImagesToArray, promiseDelay} from './helpers';
 
 class Game {
-  constructor(gameContainer) {
+  constructor({gameContainer, symbolsPath = '/rest/symbols.json'} = {}) {
+    this.symbolsPath = symbolsPath;
     this.initializeInstanceVariables();
     this.createGameLayers(gameContainer);
     this.loadGame();
@@ -75,9 +76,7 @@ class Game {
   }
 
   loadDynamicResources() {
-    const symbolsPath = '/rest/symbols.json';
-
-    return fetch(symbolsPath)
+    return fetch(this.symbolsPath)
       .then(response => response.json())
       .then(data => this.prepareImages(data));
   }
@@ -123,12 +122,12 @@ class Game {
   }
 
   onWin() {
-    this.scoreBoard.win ++;
+    this.scoreBoard.win++;
     this.layers.ui.changeResultText(this.scoreBoard);
   }
 
   onLoose() {
-    this.scoreBoard.lose ++;
+    this.scoreBoard.lose++;
     this.layers.ui.changeResultText(this.scoreBoard);
   }
 
