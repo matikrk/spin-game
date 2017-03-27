@@ -39,7 +39,7 @@ class UI {
 
     const submit = document.createElement('div');
     submit.classList.add('game-board__btnSpin');
-    setElementPosition(submit, 'submit', true);
+    setElementPosition(submit, 'submit');
 
     const elements = {select, scoreBoard, submit};
     Object.values(elements).forEach(element => this.container.appendChild(element));

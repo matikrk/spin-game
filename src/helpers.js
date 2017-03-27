@@ -22,14 +22,11 @@ function loadImagesToArray(paths, array) {
 
 
 /* eslint-disable no-param-reassign*/
-function setElementPosition(elem, key, marginEnabled = false) {
-  const {elementsPosition: {[key]: {x, y, margin, width, height}}} = config;
+function setElementPosition(elem, key) {
+  const {elementsPosition: {[key]: {x, y, width, height}}} = config;
   elem.style.position = 'absolute';
   elem.style.left = `${x}px`;
   elem.style.top = `${y}px`;
-  if (marginEnabled && margin) {
-    elem.style.margin = `${margin}px`;
-  }
   if (width) {
     elem.style.width = `${width}px`;
   }

@@ -63,9 +63,9 @@ class Background {
     ctx.beginPath();
 
     const {x, y, width, margin} = config.elementsPosition.submit;
-    const radius = (width / 2) + margin;
+    const radius = (width / 2);
 
-    ctx.arc(x + radius, y + radius, radius, 0, 2 * Math.PI);
+    ctx.arc(x + radius, y + radius, radius+ margin, 0, 2 * Math.PI);
     drawFigure(ctx);
   }
 
