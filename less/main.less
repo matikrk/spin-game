@@ -6,9 +6,15 @@
     border-radius: 50%;
     cursor: pointer;
     background: center no-repeat url('/img/btnSpin.png');
+    &:active {
+      box-shadow: 0 0 10px aqua;
+    }
     &--disabled {
       background-image: url('/img/btnSpinD.png');
       cursor: not-allowed;
+      &:active {
+        box-shadow: none;
+      }
     }
   }
   &__select {
@@ -20,10 +26,11 @@
       display: flex;
       margin: 0 2px;
       border-radius: 12px;
+      outline: none;
 
       &--active {
         border-color: aqua;
-        outline: none;
+        box-shadow: 0 0 10px aqua;
       }
       &--disabled {
         cursor: not-allowed;
