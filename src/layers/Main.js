@@ -79,7 +79,7 @@ class Main {
     const spinning = () => {
       requestAnimationFrame(() => {
         const deltaTime = +new Date() - startTime;
-        const speed = 2; //  slided/ms
+        const speed = 2; //  px/ms
         this.drawSpinClip(speed * deltaTime);
         if (shouldSpin) {
           spinning();
