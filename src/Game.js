@@ -69,8 +69,8 @@ class Game {
   loadStaticResources() {
     const paths = {
       bg: '/img/bg.png',
-      btnSpin: '/img/btnSpin.png',
-      btnSpinD: '/img/btnSpinD.png',
+      btnSpin: '/img/btn-spin.png',
+      btnSpinD: '/img/btn-spin-d.png',
     };
     return loadImagesToArray(paths, this.loadedStaticImages);
   }
