@@ -59,18 +59,47 @@ class Main {
     }
   }
 
+  getImageByModuloIndex(num) {
+    const length = this.images.length;
+    const index = num % length;
+    return this.images[index];
+  }
+
+  drawSpinClip(spinPos) {
+    const {x, y, width, height} = config.elementsPosition.spinner;
+    const imgNo = Math.floor(spinPos / height);
+    const imgOffset = spinPos % height;
+
+    const upperPartImg = this.getImageByModuloIndex(imgNo + 1).image;
+    const bottomPartImg = this.getImageByModuloIndex(imgNo).image;
+    this.ctx.clearRect(x, y, width, height);
+    const upperImgOffset = imgOffset - height;
+    this.ctx.drawImage(upperPartImg, x, y + upperImgOffset);
+    this.ctx.drawImage(bottomPartImg, x, y + imgOffset);
+    this.ctx.clearRect(x, 0, width, y);
+    this.ctx.clearRect(x, y + height, width, y + height + height);
+  }
+
   get finalSpinTime() {
     return this.spinTime + (Math.random() * this.spinTimeDelta);
   }
 
   spin(winner) {
     const nextImageIterator = this.nextImageGenerator();
-    const visibleSlidedPeriod = 120;
+    const visibleSlidedPeriod = 12;
 
+    // const interval = setInterval(() => {
+    //   const {value} = nextImageIterator.next();
+    //   this.drawImage(value);
+    // }, visibleSlidedPeriod);
+
+    const startTime = +new Date();
     const interval = setInterval(() => {
-      const {value} = nextImageIterator.next();
-      this.drawImage(value);
+      const deltaTime = +new Date() - startTime;
+      const speed = 2; // 1 slided/ms
+      this.drawSpinClip(speed * deltaTime);
     }, visibleSlidedPeriod);
+
 
     const drawFinalStep = () => {
       clearInterval(interval);
