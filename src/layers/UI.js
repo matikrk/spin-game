@@ -93,16 +93,25 @@ class UI {
   }
 
   attachListeners() {
-    this.elements.submit.addEventListener('click', this.onSubmit);
+    this.elements.submit.addEventListener('click', () => this.onClickSpinButton());
+  }
+
+  onClickSpinButton() {
+    if (this.spinnerDisabled) {
+      return;
+    }
+    this.onSubmit();
   }
 
   disableButtons() {
     this.elements.submit.classList.add('game-board__btnSpin--disabled');
+    this.spinnerDisabled = true;
     this.disableSelecting();
   }
 
   enableButtons() {
     this.elements.submit.classList.remove('game-board__btnSpin--disabled');
+    this.spinnerDisabled = false;
     this.enableSelecting();
   }
 
