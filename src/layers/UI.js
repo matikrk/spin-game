@@ -26,6 +26,7 @@ class UI {
 
     this.createControlUI();
     this.changeSelectedValue(this.selectImages[0].key);
+    this.changeResultText();
   }
 
   createControlUI() {
@@ -62,6 +63,20 @@ class UI {
     });
   }
 
+  disableSelecting() {
+    [...this.elements.select.children].forEach(button => {
+      button.classList.add('game-board__select-item--disabled');
+      button.disabled = true; //eslint-disable-line
+    });
+  }
+
+  enableSelecting() {
+    [...this.elements.select.children].forEach(button => {
+      button.classList.remove('game-board__select-item--disabled');
+      button.disabled = false; //eslint-disable-line
+    });
+  }
+
   changeSelectedValue(key) {
     [...this.elements.select.children].forEach(button => {
       if (button.getAttribute('data-option-key') === key) {
@@ -83,16 +98,16 @@ class UI {
 
   disableButtons() {
     this.elements.submit.classList.add('game-board__btnSpin--disabled');
-    this.elements.select.disabled = true;
+    this.disableSelecting();
   }
 
   enableButtons() {
     this.elements.submit.classList.remove('game-board__btnSpin--disabled');
-    this.elements.select.disabled = false;
+    this.enableSelecting();
   }
 
-  changeResultText(text) {
-    this.elements.scoreBoard.textContent = text;
+  changeResultText({win = 0, lose = 0} = {}) {
+    this.elements.scoreBoard.textContent = `win: ${win}, \n lose: ${lose}`;
   }
 
 }

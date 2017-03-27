@@ -15,6 +15,7 @@ class Game {
   initializeInstanceVariables() {
     this.loadedImages = [];
     this.loadedStaticImages = [];
+    this.scoreBoard = {win: 0, lose: 0};
   }
 
   createGameLayers(gameContainer = document.body) {
@@ -113,7 +114,6 @@ class Game {
 
   spin() {
     return new Promise(resolve => {
-      this.onWait();
       const winnerIndex = Math.floor(Math.random() * this.loadedImages.length);
       const winner = this.loadedImages[winnerIndex];
 
@@ -122,16 +122,14 @@ class Game {
     });
   }
 
-  onWait() {
-    this.layers.ui.changeResultText('Wait for it :)');
-  }
-
   onWin() {
-    this.layers.ui.changeResultText('Win');
+    this.scoreBoard.win ++;
+    this.layers.ui.changeResultText(this.scoreBoard);
   }
 
   onLoose() {
-    this.layers.ui.changeResultText('Lose');
+    this.scoreBoard.lose ++;
+    this.layers.ui.changeResultText(this.scoreBoard);
   }
 
   updateScoreBoard(winnerKey) {

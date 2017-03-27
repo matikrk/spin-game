@@ -17,13 +17,24 @@
 
     &-item {
       width: auto;
+      display: flex;
+      margin: 0 2px;
+      border-radius: 12px;
+
       &--active {
         border-color: aqua;
+        outline: none;
       }
-    img{
-      max-width:100%;
-      max-height: 60px;
-    }
+      &--disabled {
+        cursor: not-allowed;
+        img {
+          filter: grayscale(1);
+        }
+      }
+      img {
+        max-width: 100%;
+        max-height: 60px;
+      }
 
     }
   }
