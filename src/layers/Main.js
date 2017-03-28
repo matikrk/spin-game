@@ -99,7 +99,7 @@ class Main {
       .then(promiseDelay(12));
   }
 
-  changeResultText({win: winScore = 0, lose: loseScore = 0} = {}, {win = false, lose = false} = {}) {
+  changeResultText({winScore = 0, loseScore = 0} = {}, {win = false, lose = false} = {}) {
     const {x, y, width, height} = config.elementsPosition.scoreBoard;
     const centerWidth = x + (width / 2);
     const gap = height / 5;
@@ -110,9 +110,9 @@ class Main {
       ctx.textAlign = 'center';
       ctx.font = '24px Arial';
 
-
       ctx.clearRect(x, y, width, height);
 
+      // win
       ctx.save();
       if (win) {
         ctx.shadowColor = '#00ff00';
@@ -120,17 +120,15 @@ class Main {
       }
       ctx.fillText('WIN', centerWidth, y + gap);
       ctx.fillText(winScore.toString(), centerWidth, y + (2 * gap));
-
       ctx.restore();
 
+      // lose
       ctx.save();
       if (lose) {
         ctx.shadowColor = '#ff0000';
         ctx.shadowBlur = 10;
       }
       ctx.fillText('LOSE', centerWidth, y + (3 * gap));
-
-
       ctx.fillText(loseScore.toString(), centerWidth, y + (4 * gap));
       ctx.restore();
     });

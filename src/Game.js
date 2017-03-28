@@ -16,7 +16,7 @@ class Game {
   initializeInstanceVariables() {
     this.loadedImages = [];
     this.loadedStaticImages = [];
-    this.scoreBoard = {win: 0, lose: 0};
+    this.scoreBoard = {winScore: 0, loseScore: 0};
   }
 
   createGameLayers(gameContainer = document.body) {
@@ -112,7 +112,7 @@ class Game {
   }
 
   spin() {
-    //turn off glowing win/lose
+    // turn off glowing win/lose
     this.layers.main.changeResultText(this.scoreBoard);
 
 
@@ -131,10 +131,10 @@ class Game {
 
     const lastSpin = {};
     if (winnerKey === selected) {
-      this.scoreBoard.win++;
+      this.scoreBoard.winScore++;
       lastSpin.win = true;
     } else {
-      this.scoreBoard.lose++;
+      this.scoreBoard.loseScore++;
       lastSpin.lose = true;
     }
 
