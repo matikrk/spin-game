@@ -112,6 +112,10 @@ class Game {
   }
 
   spin() {
+    //turn off glowing win/lose
+    this.layers.main.changeResultText(this.scoreBoard);
+
+
     return new Promise(resolve => {
       const winnerIndex = Math.floor(Math.random() * this.loadedImages.length);
       const winner = this.loadedImages[winnerIndex];
@@ -125,13 +129,16 @@ class Game {
   updateScoreBoard(winnerKey) {
     const selected = this.layers.ui.getSelectedValue();
 
+    const lastSpin = {};
     if (winnerKey === selected) {
       this.scoreBoard.win++;
+      lastSpin.win = true;
     } else {
       this.scoreBoard.lose++;
+      lastSpin.lose = true;
     }
 
-    this.layers.main.changeResultText(this.scoreBoard);
+    this.layers.main.changeResultText(this.scoreBoard, lastSpin);
   }
 
   createMainLayer() {
