@@ -13,12 +13,12 @@
     "prepareBuildFolder":"rimraf build && cpr ./img ./build/img && cpr ./rest ./build/rest ./build/rest && cpr ./index.html ./build/index.html"
   },
   "devDependencies": {
-    "autoprefixer": "^6.7.7",
-    "ava": "^0.18.2",
+    "autoprefixer": "^7.0.1",
+    "ava": "^0.19.1",
     "babel-core": "^6.24.0",
-    "babel-loader": "^6.4.1",
+    "babel-loader": "^7.0.0",
     "babel-preset-es2015": "^6.24.0",
-    "css-loader": "^0.27.3",
+    "css-loader": "^0.28.1",
     "eslint": "^3.18.0",
     "eslint-config-airbnb-base": "^11.1.1",
     "eslint-loader": "^1.6.3",
@@ -26,9 +26,9 @@
     "extract-text-webpack-plugin": "^2.1.0",
     "less": "^2.7.2",
     "less-loader": "^4.0.2",
-    "postcss-loader": "^1.3.3",
+    "postcss-loader": "^2.0.5",
     "rimraf": "^2.6.1",
-    "style-loader": "^0.15.0",
+    "style-loader": "^0.17.0",
     "webpack": "^2.2.1",
     "webpack-dev-server": "^2.4.2",
     "cpr": "^2.0.2"
